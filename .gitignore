@@ -3,3 +3,12 @@ out/
 .idea/
 main
 repertoire.csv
+doc/_minted-report
+doc/*.aux
+doc/*.log
+doc/*.fdb_latexmk
+doc/*.fls
+doc/*.synctex.gz
+doc/*.toc
+doc/*.pdfsync
+doc/*.out

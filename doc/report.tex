@@ -1,0 +1,165 @@
+\documentclass[12pt]{report}
+\usepackage[top=3cm, bottom=3cm, left = 2cm, right = 2cm]{geometry} % margin for A4 paper
+\usepackage[utf8]{inputenc} % UTF-8 encoding
+\usepackage{graphicx} % for images
+\usepackage{amsmath,amssymb} 
+\usepackage{bm}  
+\usepackage[pdftex,bookmarks,colorlinks,breaklinks]{hyperref}  
+\hypersetup{linkcolor=black,citecolor=black,filecolor=black,urlcolor=black}
+\usepackage{memhfixc} 
+\usepackage{pdfsync}  
+\usepackage{fancyhdr}
+\usepackage{minted}
+\usepackage{indentfirst}
+\usepackage[indent]{parskip}
+\usepackage{minted}
+\usepackage{lastpage}
+
+% Header and footer
+\fancypagestyle{plain}{
+    \fancyhf{}
+    \fancyfoot[C]{\thepage\ sur \pageref{LastPage}}
+    \fancyfoot[R]{
+        \raisebox{-.5\height}{
+            \includegraphics[height=1cm]{img/logo.png}
+        }
+    }
+    \renewcommand{\headrulewidth}{0pt}
+    \renewcommand{\footrulewidth}{0pt}
+}
+
+\fancypagestyle{fancy}{
+    \fancyhf{}
+    \fancyfoot[C]{\thepage\ sur \pageref{LastPage}}
+    \fancyfoot[R]{
+        \raisebox{-.5\height}{
+            \includegraphics[height=1cm]{img/logo.png}
+        }
+    }
+    \renewcommand{\headrulewidth}{0pt}
+    \renewcommand{\footrulewidth}{0pt}
+}
+
+% Papers configuration
+\geometry{a4paper} 
+\pagestyle{fancy}
+
+% Title page
+\title{%
+  Rapport de Mini-Projet C \\
+  \large Programmation C et C++ \\
+    EFREI L3-APP-LSI2}
+\author{Matthéo PERELLE, \\ Aristote ROULOU}
+\date{\today}
+
+% Document
+\begin{document}
+\maketitle
+\tableofcontents
+
+\chapter{Présentation du projet}
+L'objectif de ce projet est de mettre en évidence les connaissances acquises lors du cours de programmation C et C++.
+Nous avons donc décider de réaliser un répertoire téléphonique dans le quel les données suivantes seront stockées :
+\begin{itemize}
+    \item Nom
+    \item Prénom
+    \item Numéro de téléphone
+    \item Adresse mail
+\end{itemize}
+
+Notre programme devra implementer les fonctionnalités suivantes :
+\begin{itemize}
+    \item Ajouter un contact
+    \item Supprimer un contact
+    \item Afficher tous les contacts
+    \item Rechercher un contact
+    \item Quitter le programme
+\end{itemize}
+
+\chapter{Implémentation}
+\section{Choix de la structure de donnée}
+Pour réaliser ce projet, nous avons donc du choisir comment nous allions structure nos données. Nous avons donc choisi d'utiliser une liste chaînée. Premièrement, cette structure de donné nous permet de stocker de façon dynamique sans se soucier du nombre de personne dans notre répertoire. De plus, cella permet de mettre en avant les connaissance du cours de structure de donnée que nous avons. 
+
+Commençons par définir notre structure de donnée Personne dans la quelle on retrouver le nom le prénom, le numéro de téléphone et l'adresse mail de la personne.
+Chaque propriété de la structure est un tableau de caractère de taille 50 et ceux même pour le téléphone pour pouvoir stocker les 0 en début de numéro.
+
+\begin{minted}{c}
+/*
+ * Structure de donnee Personne
+*/
+typedef struct Personne {
+    char nom[50];
+    char prenom[50];
+    char numero[50];
+    char mail[50];
+
+} Personne;
+\end{minted}
+
+
+Et voici alors notre structure de base en C de notre liste chaînée:
+\begin{minted}{c}
+/*
+ * Noeud de la liste chainee
+*/
+typedef struct RepertoireNode {
+    Personne *personne;
+
+    struct RepertoireNode *next;
+    struct RepertoireNode *prev;
+} RepertoireNode;
+
+/*
+ * Struture porteuse de la liste chainee
+ * permettant de materialiser le debut, et sa taille
+*/
+struct Repertoire {
+    int size;
+    RepertoireNode *head;
+} typedef Repertoire;
+\end{minted}
+
+Nous avons donc une liste doublement chainée avec une structure \textit{RepertoireNode} qui contient un pointeur vers une personne et deux pointeurs vers le noeud suivant et précédent. Et une structure \textit{Repertoire} qui contient la taille de la liste et un pointeur vers le premier noeud de la liste.
+
+\chapter{fonctionnalités supplémentaires}
+Pour ce projet nous avons rajoutés quelques fonctionnalités supplémentaires afin de rendre le programme plus agréable à utiliser.
+\section{Validation des entrées}
+Dans un premier temps, lors de la saisie d'un numéro de téléphone, nous avons mis en place une vérification afin de s'assurer que le numéro entré est bien un numéro de téléphone. Pour ce faire, nous vérification que le numero ne contient que des chiffres.
+
+Voici un exemple de la fonction de vérification :
+\begin{minted}[breaklines]{shell-session}
+Veuillez entrer le numero de la personne (pas d'indicatif, seulement des chiffres): pasunnumero
+numero invalide, il ne doit contenir que des chiffres et peut commencer par un +
+Veuillez entrer le numero de la personne (pas d'indicatif, seulement des chiffres): e11993
+numero invalide, il ne doit contenir que des chiffres et peut commencer par un +
+Veuillez entrer le numero de la personne (pas d'indicatif, seulement des chiffres): 07010101011
+\end{minted}
+
+Cette même verification est effectuée pour un email. Nous vérifions que l'adresse mail contient bien un @ et un . afin de s'assurer que l'adresse mail est valide.
+
+\begin{minted}[breaklines]{shell-session}
+Veuillez entrer le mail de la personne: pasunemail
+mail invalide, il doit contenir au moins 1 point et un @
+Veuillez entrer le mail de la personne: pasunemail@
+mail invalide, il doit contenir au moins 1 point et un @
+Veuillez entrer le mail de la personne: email@email.com
+Personne ajoutée avec succès
+\end{minted}
+
+\section{Sauvegarde et chargement}
+Nous avons aussi ajouté la possibilité de sauvegarder et charger le répertoire dans un fichier. Pour ce faire, nous avons utilisé la fonction \textit{fopen} de la librairie \textit{stdio.h} afin d'ouvrir un fichier en mode écriture ou lecture. Nous avons ensuite utilisé la fonction \textit{fprintf} afin d'écrire dans le fichier et \textit{fscanf} afin de lire dans le fichier.
+
+Le chargement du fichier ce fait au lancement du programme, et la sauvegarde ce fait lors de la fermeture du programme.
+
+Les données sont stockées dans le fichier de la façon suivante en suivant les normes CSV (semicolon-separated) où chaque ligne correspond à une personne et chaque propriété est séparée par un point-virgule :
+\begin{minted}[breaklines]{shell-session}
+John;Doe;john.doe@email.com;139123809
+Piere;mary;pierre.mary.g@efrei.net;078614514
+\end{minted}
+
+\chapter{Lancement du projet}
+Pour lancer le projet, il suffit d'utiliser le Makefile. Celui-ci permet de compiler le projet et de lancer le programme. Pour ce faire, il suffit d'utiliser la commande suivante :
+\begin{minted}[breaklines]{shell-session}
+make run
+\end{minted}
+\end{document}
