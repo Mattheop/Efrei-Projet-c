@@ -1,0 +1,4 @@
+Pour build : gcc .\src\main.c .\src\commands\commands.c .\src\commands\commands.h .\src\core\personne.c .\src\core\personne.h .\src\core\repertoire.c .\src\core\repertoire.h .\src\storage\storage_csv.c .\src\storage\storage_csv.h .\src\utils\utils.c .\src\utils\utils.h .\src\validators\validators.c .\src\validators\validators.h -o main
+Pour lancer le programme : ./main
+
+Lorsque l'on recherche une personne ou qu'on essaie d'en supprimer une, et que l'entrée n'est pas trouvée dans le répertoire, un message s'affiche et le programme redemande une entrée jusquà ce qu'il y en ait une qui existe dans le répertoire.

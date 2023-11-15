@@ -46,7 +46,7 @@ void commande_ajouter_personne(Repertoire *rep) {
 
     printf("Veuillez entrer le mail de la personne: ");
     scanf("%s", mail);
-    if (!valider_numero(mail)) {
+    if (!valider_email(mail)) {
         do {
             printf("mail invalide, il doit contenir au moins 1 point et un @\n");
             printf("Veuillez entrer le mail de la personne: ");
@@ -62,15 +62,19 @@ void commande_ajouter_personne(Repertoire *rep) {
 
 void commande_chercher_personne_par_nom(Repertoire *rep) {
     char nom[50];
+    bool invalid = true;
 
-    printf("Veuillez entrer le nom de la personne: ");
-    scanf("%s", nom);
+    while(invalid){
+        printf("Veuillez entrer le nom de la personne: ");
+        scanf("%s", nom);
 
-    Personne *p = chercherPersonne(rep, nom);
-    if (p == NULL) {
-        printf("Personne non trouvée\n");
-    } else {
-        afficherPersonne(p);
+        Personne *p = chercherPersonne(rep, nom);
+        if (p == NULL) {
+            printf("Personne non trouvée\n");
+        } else {
+            afficherPersonne(p);
+            invalid = false;
+        }
     }
 
     wait_to_continue();
@@ -78,14 +82,28 @@ void commande_chercher_personne_par_nom(Repertoire *rep) {
 
 void commande_supprimer_personne_par_nom(Repertoire *rep) {
     char nom[50];
+    bool invalid = true;
+    char confirmer;
 
-    printf("Veuillez entrer le nom de la personne: ");
-    scanf("%s", nom);
+    while(invalid){
+        printf("Veuillez entrer le nom de la personne: ");
+        scanf("%s", nom);
 
-    if (supprimerPersonne(rep, nom)) {
-        printf("Personne supprimée avec succès\n");
-    } else {
-        printf("Personne non trouvée\n");
+        Personne *p = chercherPersonne(rep, nom);
+        if (p == NULL) {
+            printf("Personne non trouvée\n");
+        } else {
+            printf("Vous allez supprimer la personne suivante :\n");
+            afficherPersonne(p);
+            printf("\nEntrer (y) pour confirmer la suppression : ");
+            scanf(" %c", &confirmer);
+            invalid = false;
+        }
+
+        if (confirmer == 'y') {
+            supprimerPersonne(rep, nom);
+            printf("Personne supprimée avec succès\n");
+        }
     }
 
     wait_to_continue();

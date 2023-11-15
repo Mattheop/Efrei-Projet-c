@@ -13,7 +13,7 @@ TARGET = main
 
 # Compilation des fichiers sources en fichiers objets
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(DEPS)
-	mkdir -p $(dir $@)
+	mkdir $(dir $@)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 $(TARGET): $(OBJS)

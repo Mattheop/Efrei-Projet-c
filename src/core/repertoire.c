@@ -61,7 +61,12 @@ bool supprimerPersonne(Repertoire *rep, char *nom) {
 Personne *chercherPersonne(Repertoire *rep, char *nom) {
     RepertoireNode *current = rep->head;
     while (current != NULL) {
-        if (strcmp(current->personne->nom, nom) == 0) {
+        if (
+            strcmp(current->personne->nom, nom) == 0 |
+            strcmp(current->personne->prenom, nom) == 0 |
+            strcmp(current->personne->numero, nom) == 0 |
+            strcmp(current->personne->mail, nom) == 0
+        ) {
             return current->personne;
         }
 
