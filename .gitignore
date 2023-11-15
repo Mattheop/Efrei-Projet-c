@@ -1,7 +1,7 @@
 out/
 .vscode/
 .idea/
-main
+main*
 repertoire.csv
 doc/_minted-report
 doc/*.aux
