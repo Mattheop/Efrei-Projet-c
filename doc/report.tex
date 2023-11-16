@@ -158,8 +158,17 @@ Piere;mary;pierre.mary.g@efrei.net;078614514
 \end{minted}
 
 \chapter{Lancement du projet}
-Pour lancer le projet, il suffit d'utiliser le Makefile. Celui-ci permet de compiler le projet et de lancer le programme. Pour ce faire, il suffit d'utiliser la commande suivante :
+Pour lancer le projet sur mac ou linux, il suffit d'utiliser le Makefile. Celui-ci permet de compiler le projet et de lancer le programme. Pour ce faire, il suffit d'utiliser la commande suivante :
 \begin{minted}[breaklines]{shell-session}
 make run
 \end{minted}
+
+Sur windows il suffit de compiler le projet avec la commande suivante :
+
+\begin{minted}[breaklines]{shell-session}
+gcc .\src\main.c .\src\commands\commands.c .\src\commands\commands.h .\src\core\personne.c .\src\core\personne.h .\src\core\repertoire.c .\src\core\repertoire.h .\src\storage\storage_csv.c .\src\storage\storage_csv.h .\src\utils\utils.c .\src\utils\utils.h .\src\validators\validators.c .\src\validators\validators.h -o main
+./main
+\end{minted}
+
+
 \end{document}
