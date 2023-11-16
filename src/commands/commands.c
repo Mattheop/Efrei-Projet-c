@@ -32,13 +32,12 @@ void commande_ajouter_personne(Repertoire *rep) {
     printf("Veuillez entrer le prenom de la personne: ");
     scanf("%s", prenom);
 
-
-    printf("Veuillez entrer le numero de la personne (pas d'indicatif, seulement des chiffres): ");
+    printf("Veuillez entrer le numero de la personne: ");
     scanf("%s", numero);
     if (!valider_numero(numero)) {
         do {
             printf("numero invalide, il ne doit contenir que des chiffres et peut commencer par un +\n");
-            printf("Veuillez entrer le numero de la personne (pas d'indicatif, seulement des chiffres): ");
+            printf("Veuillez entrer le numero de la personne: ");
             scanf("%s", numero);
         } while (!valider_numero(numero));
     }
@@ -248,8 +247,9 @@ void commande_modifier(Repertoire *rep)
                 do
                 {
                     printf("numero invalide, il ne doit contenir que des chiffres et peut commencer par un +\n");
-                    printf("Veuillez entrer le numero de la personne (pas d'indicatif, seulement des chiffres): ");
-                    scanf("%s", input);
+                    printf("Veuillez entrer le numero de la personne: ");
+                    fgets(input, sizeof input, stdin);
+                    input[strlen(input) - 1] = '\0';
                 } while (!valider_numero(input));
             }
             strcpy(chosen->numero, input);
@@ -266,7 +266,8 @@ void commande_modifier(Repertoire *rep)
                 {
                     printf("mail invalide, il doit contenir au moins 1 point et un @\n");
                     printf("Veuillez entrer le mail de la personne: ");
-                    scanf("%s", input);
+                    fgets(input, sizeof input, stdin);
+                    input[strlen(input) - 1] = '\0';
                 } while (!valider_email(input));
             }
             strcpy(chosen->mail, input);
