@@ -199,9 +199,12 @@ make run
 Sur windows il suffit de compiler le projet avec la commande suivante :
 
 \begin{minted}[breaklines]{shell-session}
-gcc .\src\main.c .\src\commands\commands.c .\src\commands\commands.h .\src\core\personne.c .\src\core\personne.h .\src\core\repertoire.c .\src\core\repertoire.h .\src\storage\storage_csv.c .\src\storage\storage_csv.h .\src\utils\utils.c .\src\utils\utils.h .\src\validators\validators.c .\src\validators\validators.h -o main
-./main
+gcc .\src\core\personne.c .\src\core\personne.h .\src\core\repertoire.c .\src\core\repertoire.h .\src\storage\storage_csv.c .\src\storage\storage_csv.h .\src\utils\utils.c .\src\utils\utils.h .\src\validators\validators.c .\src\validators\validators.h .\src\commands\commands.c .\src\commands\commands.h .\src\main.c -o main
 \end{minted}
 
+puis de lancer le programme avec la commande suivante :
+\begin{minted}[breaklines]{shell-session}
+.\main
+\end{minted}
 
 \end{document}

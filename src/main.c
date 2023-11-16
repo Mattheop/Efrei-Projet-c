@@ -49,6 +49,7 @@ int main(void) {
                 break;
             case 2:
                 commande_afficher_repertoire(rep);
+                wait_to_continue();
                 break;
             case 3:
                 commande_chercher_personne_par_nom(rep);
