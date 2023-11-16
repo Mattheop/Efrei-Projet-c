@@ -3,6 +3,7 @@
 #include "core/personne.h"
 #include "commands/commands.h"
 #include "storage/storage_csv.h"
+#include "utils/utils.h"
 
 void afficher_menu() {
     printf("========================================\n");
@@ -11,6 +12,7 @@ void afficher_menu() {
     printf("2. Afficher le repertoire\n");
     printf("3. Rechercher par un nom\n");
     printf("4. Supprimer par un nom\n");
+    printf("5. Modifier une personne\n");
     printf("0. Sauvegarder et quitter\n");
     printf("========================================\n");
 }
@@ -21,6 +23,7 @@ int demander_commande() {
     int choice = 0;
     scanf("%d", &choice);
     printf("\n");
+    flush_input();
 
     return choice;
 }
@@ -52,6 +55,9 @@ int main(void) {
                 break;
             case 4:
                 commande_supprimer_personne_par_nom(rep);
+                break;
+            case 5:
+                commande_modifier(rep);
                 break;
             case 0:
                 commande_sauvegarder_repertoire(rep, "repertoire.csv");

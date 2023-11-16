@@ -49,7 +49,7 @@
   Rapport de Mini-Projet C \\
   \large Programmation C et C++ \\
     EFREI L3-APP-LSI2}
-\author{Matthéo PERELLE, \\ Aristote ROULOU}
+\author{Matthéo PERELLE, \\ Aristote ROULLOT}
 \date{\today}
 
 % Document
@@ -67,7 +67,7 @@ Nous avons donc décider de réaliser un répertoire téléphonique dans le quel
     \item Adresse mail
 \end{itemize}
 
-Notre programme devra implementer les fonctionnalités suivantes :
+Notre programme devra implémenter les fonctionnalités suivantes :
 \begin{itemize}
     \item Ajouter un contact
     \item Supprimer un contact
@@ -78,10 +78,8 @@ Notre programme devra implementer les fonctionnalités suivantes :
 
 \chapter{Implémentation}
 \section{Choix de la structure de donnée}
-Pour réaliser ce projet, nous avons donc du choisir comment nous allions structure nos données. Nous avons donc choisi d'utiliser une liste chaînée. Premièrement, cette structure de donné nous permet de stocker de façon dynamique sans se soucier du nombre de personne dans notre répertoire. De plus, cella permet de mettre en avant les connaissance du cours de structure de donnée que nous avons. 
-
-Commençons par définir notre structure de donnée Personne dans la quelle on retrouver le nom le prénom, le numéro de téléphone et l'adresse mail de la personne.
-Chaque propriété de la structure est un tableau de caractère de taille 50 et ceux même pour le téléphone pour pouvoir stocker les 0 en début de numéro.
+Pour réaliser ce projet, nous avons donc dû choisir comment nous allions structurer nos données. Nous avons donc choisi d’utiliser une liste chaînée. Premièrement, cette structure de données nous permet de stocker de façon dynamique sans se soucier du nombre de personnes dans notre répertoire. De plus, cela permet de mettre en avant les connaissance du cours de structure de données que nous avons.
+Commençons par définir notre structure de données Personne dans laquelle on retrouve le nom, le prénom, le numéro de téléphone et l’adresse mail de la personne. Chaque propriété de la structure est un tableau de caractère de taille 50 et ce même pour le téléphone pour pouvoir stocker les 0 en début de numéro.
 
 \begin{minted}{c}
 /*
@@ -119,20 +117,20 @@ struct Repertoire {
 } typedef Repertoire;
 \end{minted}
 
-Nous avons donc une liste doublement chainée avec une structure \textit{RepertoireNode} qui contient un pointeur vers une personne et deux pointeurs vers le noeud suivant et précédent. Et une structure \textit{Repertoire} qui contient la taille de la liste et un pointeur vers le premier noeud de la liste.
+Nous avons donc une liste doublement chaînée avec une structure \textit{RepertoireNode} qui contient un pointeur vers une personne et deux pointeurs vers le nœud suivant et précédent. Et une structure \textit{Repertoire} qui contient la taille de la liste et un pointeur vers le premier nœud de la liste.
 
-\chapter{fonctionnalités supplémentaires}
-Pour ce projet nous avons rajoutés quelques fonctionnalités supplémentaires afin de rendre le programme plus agréable à utiliser.
+\chapter{Fonctionnalités supplémentaires}
+Pour ce projet nous avons rajouté quelques fonctionnalités supplémentaires afin de rendre le programme plus agréable à utiliser.
 \section{Validation des entrées}
-Dans un premier temps, lors de la saisie d'un numéro de téléphone, nous avons mis en place une vérification afin de s'assurer que le numéro entré est bien un numéro de téléphone. Pour ce faire, nous vérification que le numero ne contient que des chiffres.
+Dans un premier temps, lors de la saisie d’un numéro de téléphone, nous avons mis en place une vérification afin de s’assurer que le numéro entré est bien un numéro de téléphone. Pour ce faire, nous vérifions que le numéro ne contient que des chiffres.
 
 Voici un exemple de la fonction de vérification :
 \begin{minted}[breaklines]{shell-session}
-Veuillez entrer le numero de la personne (pas d'indicatif, seulement des chiffres): pasunnumero
+Veuillez entrer le numéro de la personne (pas d'indicatif, seulement des chiffres): pasunnumero
+numéro invalide, il ne doit contenir que des chiffres et peut commencer par un +
+Veuillez entrer le numéro de la personne (pas d'indicatif, seulement des chiffres): e11993
 numero invalide, il ne doit contenir que des chiffres et peut commencer par un +
-Veuillez entrer le numero de la personne (pas d'indicatif, seulement des chiffres): e11993
-numero invalide, il ne doit contenir que des chiffres et peut commencer par un +
-Veuillez entrer le numero de la personne (pas d'indicatif, seulement des chiffres): 07010101011
+Veuillez entrer le numéro de la personne (pas d'indicatif, seulement des chiffres): 07010101011
 \end{minted}
 
 Cette même verification est effectuée pour un email. Nous vérifions que l'adresse mail contient bien un @ et un . afin de s'assurer que l'adresse mail est valide.
@@ -146,10 +144,45 @@ Veuillez entrer le mail de la personne: email@email.com
 Personne ajoutée avec succès
 \end{minted}
 
+\section{Gestion d'information identique}
+Dans l’implémentation de la recherche, l'utilisateur peur entrer un nom, un prénom, un numéro de téléphone ou une adresse mail. Le programme va alors rechercher dans le répertoire si une personne correspond à la recherche. Si c'est le cas, le programme affiche la personne et si ce n'est pas le cas, le programme affiche un message d'erreur. Il prend aussi en charge avec plusieurs résultat comme par exemple si on recherche "John" et qu'il y a deux personnes qui s'appellent "John", le programme va afficher les deux personnes.
+
+Ce même comportement est utilisé lors de la suppression d'une personne. Si l'utilisateur entre un nom, un prénom, un numéro de téléphone ou une adresse mail et qu'il y a plusieurs personnes qui correspondent à la recherche, le programme va demander à l'utilisateur de choisir la personne qu'il souhaite supprimer.
+
+Notre prend donc bien en charge les informations identiques.
+
+\section{Modification d'une personne}
+Nous avons aussi implémenter la possibilité de modifier un contact. Pour se faire l'utilisateur cherche un utilisateur existant par la recherche habituelle, puis peut modifier ou non chaque champs. Voici un exemple.
+
+\begin{minted}[breaklines]{shell-session}
+Veuillez entrer une information quelconque de la personne pour la rechercher (vide pour annuler): perelle
+Vous allez modifier la personne suivante :
+========================================
+Nom: perelle
+Prenom: mattheo
+Numero: 8551
+Mail: @.
+========================================
+Veuillez entrer le nouveau nom de la personne (vide pour ne pas modifier): PERELLE
+Veuillez entrer le nouveau prenom de la personne (vide pour ne pas modifier):
+Veuillez entrer le nouveau numero de la personne (vide pour ne pas modifier): 9874
+Veuillez entrer le nouveau mail de la personne (vide pour ne pas modifier): mattheo.perelle@efrei.net
+Voici la personne modifiée :
+========================================
+Nom: PERELLE
+Prenom: mattheo
+Numero: 9874
+Mail: mattheo.perelle@efrei.net
+========================================
+
+Entrer (y) pour confirmer la modification : y
+Personne modifiée avec succès
+\end{minted}
+
 \section{Sauvegarde et chargement}
 Nous avons aussi ajouté la possibilité de sauvegarder et charger le répertoire dans un fichier. Pour ce faire, nous avons utilisé la fonction \textit{fopen} de la librairie \textit{stdio.h} afin d'ouvrir un fichier en mode écriture ou lecture. Nous avons ensuite utilisé la fonction \textit{fprintf} afin d'écrire dans le fichier et \textit{fscanf} afin de lire dans le fichier.
 
-Le chargement du fichier ce fait au lancement du programme, et la sauvegarde ce fait lors de la fermeture du programme.
+Le chargement du fichier se fait au lancement du programme, et la sauvegarde se fait lors de la fermeture du programme.
 
 Les données sont stockées dans le fichier de la façon suivante en suivant les normes CSV (semicolon-separated) où chaque ligne correspond à une personne et chaque propriété est séparée par un point-virgule :
 \begin{minted}[breaklines]{shell-session}
