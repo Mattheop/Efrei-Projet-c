@@ -62,11 +62,11 @@ Personne *chercherPersonne(Repertoire *rep, char *nom) {
     RepertoireNode *current = rep->head;
     while (current != NULL) {
         if (
-            strcmp(current->personne->nom, nom) == 0 |
-            strcmp(current->personne->prenom, nom) == 0 |
-            strcmp(current->personne->numero, nom) == 0 |
-            strcmp(current->personne->mail, nom) == 0
-        ) {
+                strcmp(current->personne->nom, nom) == 0 |
+                strcmp(current->personne->prenom, nom) == 0 |
+                strcmp(current->personne->numero, nom) == 0 |
+                strcmp(current->personne->mail, nom) == 0
+                ) {
             return current->personne;
         }
 
@@ -76,3 +76,47 @@ Personne *chercherPersonne(Repertoire *rep, char *nom) {
     return NULL;
 }
 
+Repertoire *chercherPersonnes(Repertoire *rep, char *nom) {
+    Repertoire *result = creerRepertoire();
+
+    RepertoireNode *current = rep->head;
+    while (current != NULL) {
+        if (
+                strcmp(current->personne->nom, nom) == 0 |
+                strcmp(current->personne->prenom, nom) == 0 |
+                strcmp(current->personne->numero, nom) == 0 |
+                strcmp(current->personne->mail, nom) == 0
+                ) {
+            ajouterPersonne(result, current->personne);
+        }
+
+        current = current->next;
+    }
+
+    return result;
+}
+
+bool supprimerPersonneExacte(Repertoire *rep, Personne *p) {
+    RepertoireNode *current = rep->head;
+    while (current != NULL) {
+        if (current->personne == p) {
+            if (current->prev == NULL) {
+                rep->head = current->next;
+            } else {
+                current->prev->next = current->next;
+            }
+
+            if (current->next != NULL) {
+                current->next->prev = current->prev;
+            }
+
+            free(current);
+            rep->size--;
+            return true;
+        }
+
+        current = current->next;
+    }
+
+    return false;
+}

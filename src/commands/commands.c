@@ -1,9 +1,9 @@
 #include "commands.h"
-#include "../core/repertoire.h"
 #include "../utils/utils.h"
 #include "../validators/validators.h"
 #include "../storage/storage_csv.h"
 #include <string.h>
+#include <stdlib.h>
 #include <stdbool.h>
 
 void commande_afficher_repertoire(Repertoire *rep) {
@@ -18,8 +18,6 @@ void commande_afficher_repertoire(Repertoire *rep) {
         afficherPersonne(current->personne);
         current = current->next;
     }
-
-    wait_to_continue();
 }
 
 void commande_ajouter_personne(Repertoire *rep) {
@@ -65,22 +63,23 @@ void commande_chercher_personne_par_nom(Repertoire *rep) {
     char nom[50];
     bool invalid = true;
 
-    while(invalid){
+    while (invalid) {
         printf("Veuillez entrer le nom de la personne (vide pour annuler): ");
         flush_input();
         fgets(nom, sizeof nom, stdin);
-        nom [strlen (nom) - 1] = '\0';
+        nom[strlen(nom) - 1] = '\0';
 
         if (strlen(nom) == 0) {
             invalid = false;
             continue;
         }
 
-        Personne *p = chercherPersonne(rep, nom);
-        if (p == NULL) {
+        Repertoire *result = chercherPersonnes(rep, nom);
+        if (result->size == 0) {
             printf("Personne non trouvée\n");
         } else {
-            afficherPersonne(p);
+            printf("Personnes trouvées (%d resultats):\n", result->size);
+            commande_afficher_repertoire(result);
             invalid = false;
         }
     }
@@ -93,11 +92,11 @@ void commande_supprimer_personne_par_nom(Repertoire *rep) {
     bool invalid = true;
     char confirmer;
 
-    while(invalid){
+    while (invalid) {
         printf("Veuillez entrer le nom de la personne (vide pour annuler): ");
         flush_input();
         fgets(nom, sizeof nom, stdin);
-        nom [strlen (nom) - 1] = '\0';
+        nom[strlen(nom) - 1] = '\0';
 
         if (strlen(nom) == 0) {
             printf("Annulation de la suppression\n");
@@ -105,19 +104,51 @@ void commande_supprimer_personne_par_nom(Repertoire *rep) {
             continue;
         }
 
-        Personne *p = chercherPersonne(rep, nom);
-        if (p == NULL) {
+        Repertoire *result = chercherPersonnes(rep, nom);
+
+        if (result->size == 0) {
             printf("Personne non trouvée\n");
-        } else {
-            printf("Vous allez supprimer la personne suivante :\n");
-            afficherPersonne(p);
-            printf("\nEntrer (y) pour confirmer la suppression : ");
-            scanf(" %c", &confirmer);
-            invalid = false;
+            continue;
         }
 
+        Personne *chosen = result->head->personne;
+
+        if (result->size > 1) {
+            printf("Plusieurs personnes trouvées (%d resultats):\n", result->size);
+            commande_afficher_repertoire(result);
+
+            printf("Veuillez entrer la position de la personne à supprimer (vide pour annuler): ");
+            fgets(nom, sizeof nom, stdin);
+            nom[strlen(nom) - 1] = '\0';
+            if (strlen(nom) == 0) {
+                printf("Annulation de la suppression\n");
+                invalid = false;
+                continue;
+            }
+
+            int position = atoi(nom);
+
+            if (position < 1 || position > result->size) {
+                printf("Position invalide\n");
+                continue;
+            }
+
+            RepertoireNode *current = result->head;
+            for (int i = 1; i < position; i++) {
+                current = current->next;
+            }
+
+            chosen = current->personne;
+        }
+
+        printf("Vous allez supprimer la personne suivante :\n");
+        afficherPersonne(chosen);
+        printf("\nEntrer (y) pour confirmer la suppression : ");
+        scanf(" %c", &confirmer);
+        invalid = false;
+
         if (confirmer == 'y') {
-            supprimerPersonne(rep, nom);
+            supprimerPersonneExacte(rep, chosen);
             printf("Personne supprimée avec succès\n");
         }
     }
